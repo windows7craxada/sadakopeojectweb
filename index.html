@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>sadakocore</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sadako is Watching</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap');
+    body {
+      background-color: #000;
+      color: #dcdcdc;
+      font-family: 'Rubik Glitch', monospace;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      background: radial-gradient(#111, #000);
+    }
+    h1 {
+      font-size: 3em;
+      color: #fff;
+      text-shadow: 0 0 10px red;
+      animation: glitch 0.4s infinite;
+    }
+    .tv-static {
+      background: url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif') center center no-repeat;
+      background-size: cover;
+      height: 200px;
+      filter: grayscale(100%) contrast(120%);
+      margin: 30px auto;
+      border: 4px solid #444;
+      box-shadow: 0 0 20px #f00;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 30px;
+      background-color: rgba(0,0,0,0.85);
+      border: 1px solid #333;
+      box-shadow: 0 0 20px #900;
+    }
+    .glitch-text {
+      color: red;
+      animation: glitch 0.3s infinite;
+    }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 red; }
+      25% { text-shadow: -2px 0 blue; }
+      50% { text-shadow: 2px 2px green; }
+      75% { text-shadow: -2px -2px magenta; }
+      100% { text-shadow: 0 0 white; }
+    }
+    .countdown {
+      font-size: 2em;
+      text-align: center;
+      margin: 30px 0;
+      color: #ff0000;
+      text-shadow: 0 0 5px #ff0000;
+    }
+    .gif-space {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .gif-space img {
+      max-width: 100%;
+      margin: 10px;
+      border: 2px solid #ff0000;
+      box-shadow: 0 0 15px #900;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SADAKO IS WATCHING...</h1>
+  </header>
+  <div class="tv-static"></div>
+  <div class="container">
+    <p><span class="glitch-text">"Você assistiu à fita."</span> Agora ela sabe quem você é.</p>
+    <p>Não adianta correr. Sete dias. Ela vai sair da tela... e te encontrar.</p>
+    <div class="countdown" id="countdown">
+      ⏳ 7 dias restantes...
+    </div>
+    <p><span class="glitch-text">七日後に死ぬ</span> (Você morrerá em sete dias)</p>
+    <div class="gif-space" id="gifs">
+      <!-- GIFs aparecem via JS -->
+    </div>
+  </div>
+  <footer>
+    🕯️ Feito por Nana – não assista a fita 🕯️
+  </footer>
+  <audio id="screamer" src="https://cdn.pixabay.com/audio/2022/03/15/audio_119bfae800.mp3" preload="auto"></audio>
+  <script>
+    // GIFs da Sadako Yamamura
+    const sadakoGifs = [
+      "https://media.tenor.com/LZKf2xq1E0AAAAAC/the-ring-sadako.gif",
+      "https://64.media.tumblr.com/6d9eb8b2452c0e6d1b4a2f3f73b2b21e/tumblr_pqsn8y4Q0p1x9f1b0o1_400.gif",
+      "https://i.pinimg.com/originals/3b/cf/54/3bcf547e3a517c6dff9989bb4cf70943.gif",
+      "https://media.tenor.com/lBvMfQo8rFIAAAAC/sadako.gif"
+    ];
+    // Adiciona os GIFs ao container
+    function addSadakoGifs() {
+      const gifDiv = document.getElementById('gifs');
+      sadakoGifs.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = "Sadako Yamamura";
+        gifDiv.appendChild(img);
+      });
+    }
+    // Jumpscare
+    function startJumpscare() {
+      const audio = document.getElementById("screamer");
+      setTimeout(() => {
+        audio.play();
+        document.body.style.backgroundColor = "#300";
+        document.body.style.transition = "background-color 0.2s";
+      }, 1000);
+    }
+    // Contador regressivo de 7 dias
+    function startCountdown() {
+      const countdown = document.getElementById("countdown");
+      const totalMillis = 7 * 24 * 60 * 60 * 1000; // 7 dias em ms
+      let startTime = Date.now();
+      function updateCountdown() {
+        let elapsed = Date.now() - startTime;
+        let timeLeft = totalMillis - (elapsed % totalMillis);
+        let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+        let minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+        let seconds = Math.floor((timeLeft / 1000) % 60);
+        countdown.innerHTML = `⏳ ${days}d ${hours}h ${minutes}m ${seconds}s restantes...`;
+      }
+      setInterval(updateCountdown, 1000);
+    }
+    // Iniciar tudo ao carregar
+    window.onload = function() {
+      addSadakoGifs();
+      startJumpscare();
+      startCountdown();
+    }
+  </script>
+</body>
+</html>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
